@@ -28,3 +28,4 @@ C:\Users\pacor\Desktop\UNIVERSIDAD\CUARTO\CBD\proyectoCBD\HB02-MongoDB-CSharp\My
 C:\Users\pacor\Desktop\UNIVERSIDAD\CUARTO\CBD\proyectoCBD\HB02-MongoDB-CSharp\MyBookyApp\bin\Debug\net8.0\runtimes\win\native\mongocrypt.dll
 C:\Users\pacor\Desktop\UNIVERSIDAD\CUARTO\CBD\proyectoCBD\HB02-MongoDB-CSharp\MyBookyApp\obj\Debug\net8.0\MyBookyApp.csproj.AssemblyReference.cache
 C:\Users\pacor\Desktop\UNIVERSIDAD\CUARTO\CBD\proyectoCBD\HB02-MongoDB-CSharp\MyBookyApp\obj\Debug\net8.0\MyBookyApp.csproj.Up2Date
+C:\Users\pacor\Desktop\UNIVERSIDAD\CUARTO\CBD\proyectoCBD\HB02-MongoDB-CSharp\MyBookyApp\obj\Debug\net8.0\MyBookyApp.sourcelink.json

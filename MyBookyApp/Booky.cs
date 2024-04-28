@@ -1,92 +1,160 @@
 using System;
 using MongoDB.Driver;
+using System.Collections.Generic;
+using MongoDB.Bson;
 
-// Define Author class to represent authors
-public class Author
+public class Usuario
 {
-    public int Id { get; set; }
-    public string Name { get; set; }
-    public string Biography { get; set; }
-    // Other properties as needed
+    public ObjectId IdUser { get; set; }
+    public string Nombre { get; set; }
+    public string CorreoElectronico { get; set; }
+    public string Contrasena { get; set; }
+    public List<ObjectId> LibrosFavoritos { get; set; }
+    public List<ObjectId> autoresSeguidos { get; set; }
+
+    public Usuario()
+    {
+        Nombre = "";
+        CorreoElectronico = "";
+        Contrasena = "";
+        LibrosFavoritos = new List<ObjectId>();
+        autoresSeguidos = new List<ObjectId>();
+    }
 }
 
-// Define Book class to represent books
-public class Book
+public class Autor
 {
-    public int Id { get; set; }
-    public string Title { get; set; }
-    public Author Author { get; set; }
-    public string Genre { get; set; }
-    // Other properties as needed
+    public ObjectId IdAutor { get; set; }
+    public string Nombre { get; set; }
+    public string Nacionalidad { get; set; }
+    public List<ObjectId> LibrosPublicados { get; set; }
+    public Autor()
+    {
+        Nombre = "";
+        Nacionalidad = "";
+        LibrosPublicados = new List<ObjectId>();
+    }
 }
 
-// Define User class to represent users (readers and writers)
-public class User
+public class Libro
 {
-    public int Id { get; set; }
-    public string Username { get; set; }
-    public string Email { get; set; }
-    // Other properties as needed
+    public ObjectId IdLibro { get; set; }
+    public string Titulo { get; set; }
+    public List<ObjectId> Autores { get; set; }
+    public string Genero { get; set; }
+    public int Likes { get; set; }
+    public List<ObjectId> Comentarios { get; set; }
+    public Libro()
+    {
+        Titulo = "";
+        Autores = new List<ObjectId>();
+        Genero = "";
+        Likes = 0;
+        Comentarios = new List<ObjectId>();
+    }
 }
 
-// Define a class for managing interactions between users, authors, and books
-public class BookPlatform
+public class Comentario
 {
-    private IMongoCollection<Author> authors;
-    private IMongoCollection<Book> books;
-    private IMongoCollection<User> users;
+    public ObjectId IdComentario { get; set; }
+    public string Texto { get; set; }
+    public ObjectId UsuarioId { get; set; }
+    public DateTime FechaPublicacion { get; set; }
 
-    public BookPlatform()
+    public Comentario()
+    {
+        Texto = "";
+        UsuarioId = ObjectId.Empty;
+        FechaPublicacion = DateTime.UtcNow;
+    }
+}
+
+
+public class Booky
+{
+    private IMongoCollection<Autor> autores;
+    private IMongoCollection<Libro> libros;
+    private IMongoCollection<Usuario> usuarios;
+    private IMongoCollection<Comentario> comentarios;
+
+    public Booky()
     {
         var client = new MongoClient("mongodb://localhost:27017");
-        var database = client.GetDatabase("bookPlatformDb");
+        var database = client.GetDatabase("BookyDB");
 
-        authors = database.GetCollection<Author>("authors");
-        books = database.GetCollection<Book>("books");
-        users = database.GetCollection<User>("users");
+        autores = database.GetCollection<Autor>("autores");
+        libros = database.GetCollection<Libro>("libros");
+        usuarios = database.GetCollection<Usuario>("usuarios");
+        comentarios = database.GetCollection<Comentario>("comentarios");
     }
 
-    // Method to add a new author to the platform
-    public void AddAuthor(Author author)
+    public void AddAutor(Autor autor)
     {
-        authors.InsertOne(author);
+        autores.InsertOne(autor);
     }
 
-    // Method to add a new book to the platform
-    public void AddBook(Book book)
+    public void AddLibro(Libro libro)
     {
-        books.InsertOne(book);
+        libros.InsertOne(libro);
     }
 
-    // Method to add a new user to the platform
-    public void AddUser(User user)
+    public void AddUsuario(Usuario usuario)
     {
-        users.InsertOne(user);
+        usuarios.InsertOne(usuario);
     }
 
-    // Other methods for interacting with authors, books, and users as needed
+    public void AddComentario(Comentario comentario)
+    {
+        comentarios.InsertOne(comentario);
+    }
 }
 
-// Main class to demonstrate the usage of the BookPlatform class
-public class Program
+
+public class Programa
 {
     public static void Main(string[] args)
     {
-        // Create a new instance of BookPlatform
-        BookPlatform platform = new BookPlatform();
+        Booky platform = new Booky();
 
-        // Example usage: Adding a new author
-        Author author1 = new Author { Id = 1, Name = "Jane Doe", Biography = "Bestselling author of fantasy novels." };
-        platform.AddAuthor(author1);
+        Autor autor1 = new Autor
+        {
+            IdAutor = ObjectId.GenerateNewId(),
+            Nombre = "Gabriel García Márquez",
+            Nacionalidad = "Colombia",
+            LibrosPublicados = new List<ObjectId>()
+        };
+        platform.AddAutor(autor1);
 
-        // Example usage: Adding a new book
-        Book book1 = new Book { Id = 1, Title = "The Magic Kingdom", Author = author1, Genre = "Fantasy" };
-        platform.AddBook(book1);
+        Usuario usuario1 = new Usuario
+        {
+            IdUser = ObjectId.GenerateNewId(),
+            Nombre = "Usuario1",
+            CorreoElectronico = "usuario1@example.com",
+            Contrasena = "contrasena1",
+            LibrosFavoritos = new List<ObjectId>(),
+            autoresSeguidos = new List<ObjectId> { autor1.IdAutor } // Usar el ObjectId del autor creado previamente
+        };
+        platform.AddUsuario(usuario1);
 
-        // Example usage: Adding a new user
-        User user1 = new User { Id = 1, Username = "reader123", Email = "reader123@example.com" };
-        platform.AddUser(user1);
+        Libro libro1 = new Libro
+        {
+            IdLibro = ObjectId.GenerateNewId(),
+            Titulo = "Cien años de soledad",
+            Autores = new List<ObjectId> { autor1.IdAutor }, // Usar el ObjectId del autor creado previamente
+            Genero = "Realismo mágico",
+            Likes = 100,
+            Comentarios = new List<ObjectId>()
+        };
+        platform.AddLibro(libro1);
 
-        // Other interactions with the platform as needed
+        Comentario comentario1 = new Comentario
+        {
+            IdComentario = ObjectId.GenerateNewId(),
+            Texto = "¡Excelente libro!",
+            UsuarioId = usuario1.IdUser, // Usar el ObjectId del usuario creado previamente
+            FechaPublicacion = DateTime.UtcNow
+        };
+        platform.AddComentario(comentario1);
     }
 }
+
