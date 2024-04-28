@@ -201,6 +201,7 @@ public class Programa
             Comentarios = new List<Comentario> { comentario1 } // Usar el ObjectId del comentario creado previamente
         };
         platform.AddLibro(libro1);
+        
         platform.AddFavoritos(usuario1, libro1);
 
 
