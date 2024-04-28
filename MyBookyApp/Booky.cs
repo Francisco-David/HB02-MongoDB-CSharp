@@ -7,20 +7,20 @@ using MongoDB.Bson.Serialization.Attributes;
 public class Usuario
 {
      [BsonId]
-    public ObjectId IdUser { get; set; }
+    public ObjectId IdUsuario { get; set; }
     public string Nombre { get; set; }
     public string CorreoElectronico { get; set; }
     public string Contrasena { get; set; }
-    public List<ObjectId> LibrosFavoritos { get; set; }
-    public List<ObjectId> autoresSeguidos { get; set; }
+    public List<Libro> LibrosFavoritos { get; set; }
+    public List<Autor> AutoresSeguidos { get; set; }
 
     public Usuario()
     {
         Nombre = "";
         CorreoElectronico = "";
         Contrasena = "";
-        LibrosFavoritos = new List<ObjectId>();
-        autoresSeguidos = new List<ObjectId>();
+        LibrosFavoritos = new List<Libro>();
+        AutoresSeguidos = new List<Autor>();
     }
 }
 
@@ -123,20 +123,31 @@ public class Booky
         comentarios.InsertOne(comentario);
     }
     
-    public void AddFavoritos( )
+    public void AddFavoritos( Usuario usuario, Libro libro)
     {
-    //añadir el libro a la lista de libros favoritos del usuario
-        
+        var filter = Builders<Usuario>.Filter.Eq(u => u.IdUsuario, usuario.IdUsuario);
+        Usuario user = usuarios.Find(filter).FirstOrDefault();
+        user.LibrosFavoritos.Add(libro);
+        var update = Builders<Usuario>.Update.Set(u => u.LibrosFavoritos, user.LibrosFavoritos);
+        usuarios.UpdateOne(filter, update);
     }
 
-    public void SeguirAutor( )
+    public void SeguirAutor(Usuario usuario, Autor autor )
     {
-    //añadir el autor a la lista de autores seguidos del usuario
+        var filter = Builders<Usuario>.Filter.Eq(u => u.IdUsuario, usuario.IdUsuario);
+        Usuario user = usuarios.Find(filter).FirstOrDefault();
+        user.AutoresSeguidos.Add(autor);
+        var update = Builders<Usuario>.Update.Set(u => u.AutoresSeguidos, user.AutoresSeguidos);
+        usuarios.UpdateOne(filter, update);
     }
 
-    public void PublicarComentario( )
+    public void PublicarComentario(Libro libro, Comentario comentario)
     {
-    //añadir el comentario a la lista de comentarios del libro
+        var filter = Builders<Libro>.Filter.Eq(l => l.IdLibro, libro.IdLibro);
+        Libro book = libros.Find(filter).FirstOrDefault();
+        book.Comentarios.Add(comentario);
+        var update = Builders<Libro>.Update.Set(l => l.Comentarios, book.Comentarios);
+        libros.UpdateOne(filter, update);
     }
   
 
@@ -161,20 +172,21 @@ public class Programa
 
         Usuario usuario1 = new Usuario
         {
-            IdUser = ObjectId.GenerateNewId(),
+            IdUsuario = ObjectId.GenerateNewId(),
             Nombre = "Usuario1",
             CorreoElectronico = "usuario1@example.com",
             Contrasena = "contrasena1",
-            LibrosFavoritos = new List<ObjectId>(),
-            autoresSeguidos = new List<ObjectId> { autor1.IdAutor } // Usar el ObjectId del autor creado previamente
+            LibrosFavoritos = new List<Libro>(),
+            AutoresSeguidos = new List<Autor>() // Usar el ObjectId del autor creado previamente
         };
         platform.AddUsuario(usuario1);
+        platform.SeguirAutor(usuario1, autor1);
 
          Comentario comentario1 = new Comentario
         {
             IdComentario = ObjectId.GenerateNewId(),
             Texto = "¡Excelente libro!",
-            UsuarioId = usuario1.IdUser, // Usar el ObjectId del usuario creado previamente
+            UsuarioId = usuario1.IdUsuario, // Usar el ObjectId del usuario creado previamente
             FechaPublicacion = DateTime.UtcNow
         };
         platform.AddComentario(comentario1);
@@ -189,7 +201,17 @@ public class Programa
             Comentarios = new List<Comentario> { comentario1 } // Usar el ObjectId del comentario creado previamente
         };
         platform.AddLibro(libro1);
-       
+        platform.AddFavoritos(usuario1, libro1);
+
+
+         Comentario comentario2 = new Comentario
+        {
+            IdComentario = ObjectId.GenerateNewId(),
+            Texto = "waos",
+            UsuarioId = usuario1.IdUsuario, // Usar el ObjectId del usuario creado previamente
+            FechaPublicacion = DateTime.UtcNow
+        };
+        platform.PublicarComentario(libro1, comentario2);
        
     }
 }
