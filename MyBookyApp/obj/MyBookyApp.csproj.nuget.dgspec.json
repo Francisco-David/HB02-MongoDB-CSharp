@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\pacor\\Desktop\\UNIVERSIDAD\\CUARTO\\CBD\\proyectoCBD\\HB02-MongoDB-CSharp\\MyBookyApp\\MyBookyApp.csproj": {}
+    "C:\\Users\\adar3\\Desktop\\Cuarto\\CBD\\Proyecto\\HB02-MongoDB-CSharp\\MyBookyApp\\MyBookyApp.csproj": {}
   },
   "projects": {
-    "C:\\Users\\pacor\\Desktop\\UNIVERSIDAD\\CUARTO\\CBD\\proyectoCBD\\HB02-MongoDB-CSharp\\MyBookyApp\\MyBookyApp.csproj": {
+    "C:\\Users\\adar3\\Desktop\\Cuarto\\CBD\\Proyecto\\HB02-MongoDB-CSharp\\MyBookyApp\\MyBookyApp.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\pacor\\Desktop\\UNIVERSIDAD\\CUARTO\\CBD\\proyectoCBD\\HB02-MongoDB-CSharp\\MyBookyApp\\MyBookyApp.csproj",
+        "projectUniqueName": "C:\\Users\\adar3\\Desktop\\Cuarto\\CBD\\Proyecto\\HB02-MongoDB-CSharp\\MyBookyApp\\MyBookyApp.csproj",
         "projectName": "MyBookyApp",
-        "projectPath": "C:\\Users\\pacor\\Desktop\\UNIVERSIDAD\\CUARTO\\CBD\\proyectoCBD\\HB02-MongoDB-CSharp\\MyBookyApp\\MyBookyApp.csproj",
-        "packagesPath": "C:\\Users\\pacor\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\pacor\\Desktop\\UNIVERSIDAD\\CUARTO\\CBD\\proyectoCBD\\HB02-MongoDB-CSharp\\MyBookyApp\\obj\\",
+        "projectPath": "C:\\Users\\adar3\\Desktop\\Cuarto\\CBD\\Proyecto\\HB02-MongoDB-CSharp\\MyBookyApp\\MyBookyApp.csproj",
+        "packagesPath": "C:\\Users\\adar3\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\adar3\\Desktop\\Cuarto\\CBD\\Proyecto\\HB02-MongoDB-CSharp\\MyBookyApp\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\pacor\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\adar3\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"

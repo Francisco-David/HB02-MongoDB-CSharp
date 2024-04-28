@@ -2,9 +2,11 @@ using System;
 using MongoDB.Driver;
 using System.Collections.Generic;
 using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 
 public class Usuario
 {
+     [BsonId]
     public ObjectId IdUser { get; set; }
     public string Nombre { get; set; }
     public string CorreoElectronico { get; set; }
@@ -24,38 +26,45 @@ public class Usuario
 
 public class Autor
 {
+     [BsonId]
     public ObjectId IdAutor { get; set; }
     public string Nombre { get; set; }
     public string Nacionalidad { get; set; }
-    public List<ObjectId> LibrosPublicados { get; set; }
+    public List<string> Libros { get; set; }
     public Autor()
     {
         Nombre = "";
         Nacionalidad = "";
-        LibrosPublicados = new List<ObjectId>();
+        Libros = new List<string>(); 
+       
     }
 }
 
 public class Libro
 {
+     [BsonId]
     public ObjectId IdLibro { get; set; }
     public string Titulo { get; set; }
-    public List<ObjectId> Autores { get; set; }
+
+     public Autor Autor { get; set; }
+
     public string Genero { get; set; }
     public int Likes { get; set; }
-    public List<ObjectId> Comentarios { get; set; }
+    public List<Comentario> Comentarios { get; set; }
+
     public Libro()
     {
         Titulo = "";
-        Autores = new List<ObjectId>();
+         Autor = new Autor();
         Genero = "";
         Likes = 0;
-        Comentarios = new List<ObjectId>();
+        Comentarios = new List<Comentario>();
     }
 }
 
 public class Comentario
 {
+     [BsonId]
     public ObjectId IdComentario { get; set; }
     public string Texto { get; set; }
     public ObjectId UsuarioId { get; set; }
@@ -95,6 +104,12 @@ public class Booky
 
     public void AddLibro(Libro libro)
     {
+        var filter = Builders<Autor>.Filter.Eq(a => a.IdAutor, libro.Autor.IdAutor);
+        Autor autor = autores.Find(filter).FirstOrDefault();
+        autor.Libros.Add(libro.Titulo);
+        var update = Builders<Autor>.Update.Set(a => a.Libros, autor.Libros);
+        autores.UpdateOne(filter, update);
+
         libros.InsertOne(libro);
     }
 
@@ -107,6 +122,24 @@ public class Booky
     {
         comentarios.InsertOne(comentario);
     }
+    
+    public void AddFavoritos( )
+    {
+    //añadir el libro a la lista de libros favoritos del usuario
+        
+    }
+
+    public void SeguirAutor( )
+    {
+    //añadir el autor a la lista de autores seguidos del usuario
+    }
+
+    public void PublicarComentario( )
+    {
+    //añadir el comentario a la lista de comentarios del libro
+    }
+  
+
 }
 
 
@@ -121,7 +154,8 @@ public class Programa
             IdAutor = ObjectId.GenerateNewId(),
             Nombre = "Gabriel García Márquez",
             Nacionalidad = "Colombia",
-            LibrosPublicados = new List<ObjectId>()
+            Libros = new List<string>()
+            
         };
         platform.AddAutor(autor1);
 
@@ -136,18 +170,7 @@ public class Programa
         };
         platform.AddUsuario(usuario1);
 
-        Libro libro1 = new Libro
-        {
-            IdLibro = ObjectId.GenerateNewId(),
-            Titulo = "Cien años de soledad",
-            Autores = new List<ObjectId> { autor1.IdAutor }, // Usar el ObjectId del autor creado previamente
-            Genero = "Realismo mágico",
-            Likes = 100,
-            Comentarios = new List<ObjectId>()
-        };
-        platform.AddLibro(libro1);
-
-        Comentario comentario1 = new Comentario
+         Comentario comentario1 = new Comentario
         {
             IdComentario = ObjectId.GenerateNewId(),
             Texto = "¡Excelente libro!",
@@ -155,6 +178,19 @@ public class Programa
             FechaPublicacion = DateTime.UtcNow
         };
         platform.AddComentario(comentario1);
+
+        Libro libro1 = new Libro
+        {
+            IdLibro = ObjectId.GenerateNewId(),
+            Titulo = "Cien años de soledad",
+            Autor =  autor1,// Usar el ObjectId del autor creado previamente
+            Genero = "Realismo mágico",
+            Likes = 100,
+            Comentarios = new List<Comentario> { comentario1 } // Usar el ObjectId del comentario creado previamente
+        };
+        platform.AddLibro(libro1);
+       
+       
     }
 }
 
