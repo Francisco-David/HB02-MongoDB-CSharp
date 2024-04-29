@@ -6,7 +6,7 @@ using MongoDB.Bson.Serialization.Attributes;
 
 public class Usuario
 {
-     [BsonId]
+    [BsonId]
     public ObjectId IdUsuario { get; set; }
     public string Nombre { get; set; }
     public string CorreoElectronico { get; set; }
@@ -42,7 +42,7 @@ public class Autor
 
 public class Libro
 {
-     [BsonId]
+    [BsonId]
     public ObjectId IdLibro { get; set; }
     public string Titulo { get; set; }
 
@@ -64,7 +64,7 @@ public class Libro
 
 public class Comentario
 {
-     [BsonId]
+    [BsonId]
     public ObjectId IdComentario { get; set; }
     public string Texto { get; set; }
     public ObjectId UsuarioId { get; set; }
@@ -208,7 +208,7 @@ public class Poblacion
         aplicacion.AddUsuario(usuario1);
         aplicacion.SeguirAutor(usuario1.IdUsuario, autor1.IdAutor);
 
-         Comentario comentario1 = new Comentario
+        Comentario comentario1 = new Comentario
         {
             IdComentario = ObjectId.GenerateNewId(),
             Texto = "¡Excelente libro!",
@@ -232,14 +232,14 @@ public class Poblacion
         aplicacion.AddFavoritos(usuario1.IdUsuario, libro1.IdLibro);
 
 
-         Comentario comentario2 = new Comentario
+        Comentario comentario2 = new Comentario
         {
             IdComentario = ObjectId.GenerateNewId(),
             Texto = "waos",
             UsuarioId = usuario1.IdUsuario, 
             FechaPublicacion = DateTime.UtcNow
-        }
-        aplicacion.AddComentario(comentario2.id);
+        };
+        aplicacion.AddComentario(comentario2);
         aplicacion.PublicarComentario(libro1.IdLibro, comentario2.IdComentario);
        
     }
