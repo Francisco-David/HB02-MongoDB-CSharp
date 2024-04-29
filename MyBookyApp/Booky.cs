@@ -26,7 +26,7 @@ public class Usuario
 
 public class Autor
 {
-     [BsonId]
+    [BsonId]
     public ObjectId IdAutor { get; set; }
     public string Nombre { get; set; }
     public string Nacionalidad { get; set; }
@@ -46,7 +46,7 @@ public class Libro
     public ObjectId IdLibro { get; set; }
     public string Titulo { get; set; }
 
-     public Autor Autor { get; set; }
+    public List<Autor> Autor { get; set; }
 
     public string Genero { get; set; }
     public int Likes { get; set; }
@@ -55,7 +55,7 @@ public class Libro
     public Libro()
     {
         Titulo = "";
-         Autor = new Autor();
+        Autor = new List<Autor>();
         Genero = "";
         Likes = 0;
         Comentarios = new List<Comentario>();
@@ -102,14 +102,22 @@ public class Booky
         autores.InsertOne(autor);
     }
 
-    public void AddLibro(Libro libro)
+    public void AddLibro(Libro libro, List<ObjectId> autorIDs)
     {
-        var filter = Builders<Autor>.Filter.Eq(a => a.IdAutor, libro.Autor.IdAutor);
-        Autor autor = autores.Find(filter).FirstOrDefault();
-        autor.Libros.Add(libro.Titulo);
-        var update = Builders<Autor>.Update.Set(a => a.Libros, autor.Libros);
-        autores.UpdateOne(filter, update);
-
+        List<Autor> autoresDelLibro = new List<Autor>();
+        foreach (ObjectId autorID in autorIDs)
+        {
+            var filter = Builders<Autor>.Filter.Eq(a => a.IdAutor, autorID);
+            Autor autor = this.autores.Find(filter).FirstOrDefault();
+            if (autor != null)
+            {
+                autoresDelLibro.Add(autor);
+                autor.Libros.Add(libro.Titulo);
+                var update = Builders<Autor>.Update.Set(a => a.Libros, autor.Libros);
+                autores.UpdateOne(filter, update);
+            }
+        }
+        libro.Autor = autoresDelLibro;
         libros.InsertOne(libro);
     }
 
@@ -213,23 +221,23 @@ public class Programa
         {
             IdLibro = ObjectId.GenerateNewId(),
             Titulo = "Cien años de soledad",
-            Autor =  autor1,
             Genero = "Realismo mágico",
             Likes = 100,
             Comentarios = new List<Comentario> { comentario1 } 
         };
-        platform.AddLibro(libro1);
+        List<ObjectId> autores = new List<ObjectId>();
+        autores.Add(autor1.IdAutor);
+        platform.AddLibro(libro1, autores);
 
         platform.AddFavoritos(usuario1.IdUsuario, libro1.IdLibro);
-
-
-         Comentario comentario2 = new Comentario
+        Comentario comentario2 = new Comentario
         {
             IdComentario = ObjectId.GenerateNewId(),
             Texto = "waos",
             UsuarioId = usuario1.IdUsuario, 
             FechaPublicacion = DateTime.UtcNow
         };
+        platform.AddComentario(comentario2);
         platform.PublicarComentario(libro1.IdLibro, comentario2.IdComentario);
        
     }
