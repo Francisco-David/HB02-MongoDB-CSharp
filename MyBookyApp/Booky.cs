@@ -180,11 +180,11 @@ public class Booky
 }
 
 
-public class Programa
+public class Poblacion
 {
     public static void Main(string[] args)
     {
-        Booky platform = new Booky();
+        Booky aplicacion = new Booky();
 
         Autor autor1 = new Autor
         {
@@ -194,7 +194,7 @@ public class Programa
             Libros = new List<string>()
             
         };
-        platform.AddAutor(autor1);
+        aplicacion.AddAutor(autor1);
 
         Usuario usuario1 = new Usuario
         {
@@ -205,8 +205,8 @@ public class Programa
             LibrosFavoritos = new List<Libro>(),
             AutoresSeguidos = new List<Autor>() 
         };
-        platform.AddUsuario(usuario1);
-        platform.SeguirAutor(usuario1.IdUsuario, autor1.IdAutor);
+        aplicacion.AddUsuario(usuario1);
+        aplicacion.SeguirAutor(usuario1.IdUsuario, autor1.IdAutor);
 
          Comentario comentario1 = new Comentario
         {
@@ -215,7 +215,7 @@ public class Programa
             UsuarioId = usuario1.IdUsuario, 
             FechaPublicacion = DateTime.UtcNow
         };
-        platform.AddComentario(comentario1);
+        aplicacion.AddComentario(comentario1);
 
         Libro libro1 = new Libro
         {
@@ -227,18 +227,20 @@ public class Programa
         };
         List<ObjectId> autores = new List<ObjectId>();
         autores.Add(autor1.IdAutor);
-        platform.AddLibro(libro1, autores);
+        aplicacion.AddLibro(libro1, autores);
 
-        platform.AddFavoritos(usuario1.IdUsuario, libro1.IdLibro);
-        Comentario comentario2 = new Comentario
+        aplicacion.AddFavoritos(usuario1.IdUsuario, libro1.IdLibro);
+
+
+         Comentario comentario2 = new Comentario
         {
             IdComentario = ObjectId.GenerateNewId(),
             Texto = "waos",
             UsuarioId = usuario1.IdUsuario, 
             FechaPublicacion = DateTime.UtcNow
-        };
-        platform.AddComentario(comentario2);
-        platform.PublicarComentario(libro1.IdLibro, comentario2.IdComentario);
+        }
+        aplicacion.AddComentario(comentario2.id);
+        aplicacion.PublicarComentario(libro1.IdLibro, comentario2.IdComentario);
        
     }
 }
