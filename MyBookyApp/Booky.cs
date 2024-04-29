@@ -177,7 +177,7 @@ public class Programa
             CorreoElectronico = "usuario1@example.com",
             Contrasena = "contrasena1",
             LibrosFavoritos = new List<Libro>(),
-            AutoresSeguidos = new List<Autor>() // Usar el ObjectId del autor creado previamente
+            AutoresSeguidos = new List<Autor>()
         };
         platform.AddUsuario(usuario1);
         platform.SeguirAutor(usuario1, autor1);
@@ -186,7 +186,7 @@ public class Programa
         {
             IdComentario = ObjectId.GenerateNewId(),
             Texto = "¡Excelente libro!",
-            UsuarioId = usuario1.IdUsuario, // Usar el ObjectId del usuario creado previamente
+            UsuarioId = usuario1.IdUsuario,
             FechaPublicacion = DateTime.UtcNow
         };
         platform.AddComentario(comentario1);
@@ -195,10 +195,10 @@ public class Programa
         {
             IdLibro = ObjectId.GenerateNewId(),
             Titulo = "Cien años de soledad",
-            Autor =  autor1,// Usar el ObjectId del autor creado previamente
+            Autor =  autor1,
             Genero = "Realismo mágico",
             Likes = 100,
-            Comentarios = new List<Comentario> { comentario1 } // Usar el ObjectId del comentario creado previamente
+            Comentarios = new List<Comentario> { comentario1 } 
         };
         platform.AddLibro(libro1);
         
@@ -209,7 +209,7 @@ public class Programa
         {
             IdComentario = ObjectId.GenerateNewId(),
             Texto = "waos",
-            UsuarioId = usuario1.IdUsuario, // Usar el ObjectId del usuario creado previamente
+            UsuarioId = usuario1.IdUsuario,
             FechaPublicacion = DateTime.UtcNow
         };
         platform.PublicarComentario(libro1, comentario2);
